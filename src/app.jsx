@@ -1,43 +1,48 @@
 // src/App.jsx
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api";
 
 function App() {
+  const [userName, setUserName] = useState(localStorage.getItem("userName") || "");
+  const [loggedIn, setLoggedIn] = useState(!!userName);
+  const [code, setCode] = useState("");
+  const [premiumUnlocked, setPremiumUnlocked] = useState(false);
+  const [freeUsed, setFreeUsed] = useState(localStorage.getItem("freeUsed") === "yes");
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [mood, setMood] = useState(null);
   const [bgColor, setBgColor] = useState("#0A1A14");
+
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   useEffect(() => {
-  Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri(
-      "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"
-    ),
-    faceapi.nets.faceExpressionNet.loadFromUri(
-      "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"
-    )
-  ]).then(startVideo);
-}, []);
-
-
+    if (premiumUnlocked) {
+      Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri("https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"),
+        faceapi.nets.faceExpressionNet.loadFromUri("https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/")
+      ]).then(startVideo);
+    }
+  }, [premiumUnlocked]);
 
   const startVideo = () => {
     const video = document.getElementById("video");
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-      video.srcObject = stream;
-    });
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+      })
+      .catch(() => {
+        setMood("neutral");
+        setBgColor("#1A1A1A");
+      });
 
-    video.addEventListener("play", () => {
+    video?.addEventListener("play", () => {
       const canvas = faceapi.createCanvasFromMedia(video);
       document.body.append(canvas);
       const displaySize = { width: 300, height: 225 };
       faceapi.matchDimensions(canvas, displaySize);
       setInterval(async () => {
-        const detections = await faceapi
-          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-          .withFaceExpressions();
+        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
         const resized = faceapi.resizeResults(detections, displaySize);
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawDetections(canvas, resized);
@@ -50,6 +55,35 @@ function App() {
         }
       }, 2000);
     });
+  };
+
+  const handleLogin = (name) => {
+    localStorage.setItem("userName", name);
+    setUserName(name);
+    setLoggedIn(true);
+  };
+
+  const verifyCode = () => {
+    if (code.trim() === "963") {
+      setPremiumUnlocked(true);
+    } else {
+      alert("Invalid code. Please try again.");
+    }
+  };
+
+  const startVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return alert("Voice recognition not supported");
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setMessage(transcript);
+      handleSend();
+    };
+    recognition.start();
   };
 
   const speak = (text) => {
@@ -90,30 +124,57 @@ function App() {
     }
   };
 
-  const startVoiceInput = () => {
-    const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setMessage(transcript);
-      handleSend();
-    };
-    recognition.start();
+  const handleFreeMeditation = () => {
+    localStorage.setItem("freeUsed", "yes");
+    setFreeUsed(true);
+    document.getElementById("meditation").style.display = "block";
   };
 
+  if (!loggedIn) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h2>Welcome to Mindful AI</h2>
+        <p>Please continue:</p>
+        <button onClick={() => handleLogin("guest@email.com")}>Continue with Email</button>
+        <button onClick={() => handleLogin("google_user")}>Continue with Google</button>
+        <button onClick={() => handleLogin("facebook_user")}>Continue with Facebook</button>
+      </div>
+    );
+  }
+
+  if (!premiumUnlocked) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h2>Welcome, {userName}</h2>
+        <p>Enter your premium code:</p>
+        <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter code" />
+        <button onClick={verifyCode}>Unlock</button>
+
+        <h3 style={{ marginTop: "2rem" }}>Free Meditation</h3>
+        {freeUsed ? (
+          <p>✅ Session used today</p>
+        ) : (
+          <button onClick={handleFreeMeditation}>▶️ Start Free Meditation</button>
+        )}
+
+        <div id="meditation" style={{ display: "none", marginTop: "1rem" }}>
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/7EJKDj6ELiM?autoplay=1&controls=0&modestbranding=1&rel=0"
+            title="Meditation"
+            frameBorder="0"
+            allow="autoplay"
+            allowFullScreen
+            style={{ borderRadius: "12px" }}
+          ></iframe>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      style={{
-        padding: "2rem",
-        fontFamily: "sans-serif",
-        maxWidth: 600,
-        margin: "auto",
-        backgroundColor: bgColor,
-        color: "white",
-        borderRadius: "10px"
-      }}
-    >
+    <div style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: 600, margin: "auto", backgroundColor: bgColor, color: "white", borderRadius: "10px" }}>
       <h1>🧘 Mindful Voice + Mood AI</h1>
 
       <video id="video" width="300" height="225" autoPlay muted style={{ borderRadius: "8px" }} />
@@ -133,30 +194,14 @@ function App() {
         <button
           onClick={handleSend}
           disabled={loading}
-          style={{
-            padding: "0.75rem 1.5rem",
-            backgroundColor: "#2E9E83",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "1rem",
-            cursor: "pointer"
-          }}
+          style={{ padding: "0.75rem 1.5rem", backgroundColor: "#2E9E83", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}
         >
           {loading ? "Thinking..." : "Send to AI"}
         </button>
 
         <button
           onClick={startVoiceInput}
-          style={{
-            padding: "0.75rem 1.5rem",
-            backgroundColor: "#555",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "1rem",
-            cursor: "pointer"
-          }}
+          style={{ padding: "0.75rem 1.5rem", backgroundColor: "#555", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}
         >
           🎙️ Speak
         </button>
