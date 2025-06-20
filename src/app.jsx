@@ -13,14 +13,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [mood, setMood] = useState(null);
   const [bgColor, setBgColor] = useState("#0A1A14");
-
+  const [moodHistory, setMoodHistory] = useState([]);
+  const [isListening, setIsListening] = useState(false);
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   useEffect(() => {
     if (premiumUnlocked) {
       Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri("https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/"),
-        faceapi.nets.faceExpressionNet.loadFromUri("https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/")
+        faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+        faceapi.nets.faceExpressionNet.loadFromUri("/models")
       ]).then(startVideo);
     }
   }, [premiumUnlocked]);
@@ -52,9 +53,21 @@ function App() {
           const topEmotion = Object.entries(emotions).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
           setMood(topEmotion);
           setBgColor(topEmotion === "happy" ? "#103C2D" : "#2E2E2E");
+          setMoodHistory((prev) => [...prev, { emotion: topEmotion, time: Date.now() }]);
         }
       }, 2000);
     });
+  };
+
+  const summarizeMood = () => {
+    const count = {};
+    for (const entry of moodHistory) {
+      count[entry.emotion] = (count[entry.emotion] || 0) + 1;
+    }
+    const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
+    const summary = sorted.map(([m, c]) => `${m}: ${c}`).join("\n");
+    const top = sorted[0]?.[0] || "neutral";
+    alert(`🧠 Mood Summary:\n\nMost frequent: ${top}\n\nDetails:\n${summary}`);
   };
 
   const handleLogin = (name) => {
@@ -71,19 +84,36 @@ function App() {
     }
   };
 
-  const startVoiceInput = () => {
+  let recognition = null;
+
+  const startVoiceConversation = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return alert("Voice recognition not supported");
 
-    const recognition = new SpeechRecognition();
+    recognition = new SpeechRecognition();
     recognition.lang = "en-US";
     recognition.interimResults = false;
-    recognition.onresult = (event) => {
+    recognition.continuous = false;
+
+    recognition.onresult = async (event) => {
       const transcript = event.results[0][0].transcript;
       setMessage(transcript);
-      handleSend();
+      await handleSend(transcript);
+      if (isListening) recognition.start(); // continue loop
     };
+
+    recognition.onerror = (e) => {
+      console.error("Speech error:", e.error);
+      if (isListening) recognition.start(); // retry on error
+    };
+
+    setIsListening(true);
     recognition.start();
+  };
+
+  const stopVoiceConversation = () => {
+    setIsListening(false);
+    recognition?.stop();
   };
 
   const speak = (text) => {
@@ -93,8 +123,9 @@ function App() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const handleSend = async () => {
-    if (!message.trim()) return;
+  const handleSend = async (customInput) => {
+    const msg = customInput || message;
+    if (!msg.trim()) return;
     setLoading(true);
     setResponse("");
     try {
@@ -108,7 +139,7 @@ function App() {
           model: "gpt-4",
           messages: [
             { role: "system", content: "You are a calming emotional assistant." },
-            { role: "user", content: message }
+            { role: "user", content: msg }
           ]
         })
       });
@@ -134,10 +165,7 @@ function App() {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2>Welcome to Mindful AI</h2>
-        <p>Please continue:</p>
         <button onClick={() => handleLogin("guest@email.com")}>Continue with Email</button>
-        <button onClick={() => handleLogin("google_user")}>Continue with Google</button>
-        <button onClick={() => handleLogin("facebook_user")}>Continue with Facebook</button>
       </div>
     );
   }
@@ -146,7 +174,6 @@ function App() {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2>Welcome, {userName}</h2>
-        <p>Enter your premium code:</p>
         <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter code" />
         <button onClick={verifyCode}>Unlock</button>
 
@@ -190,9 +217,9 @@ function App() {
         style={{ width: "100%", padding: "1rem", fontSize: "1rem", marginBottom: "1rem" }}
       />
 
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <button
-          onClick={handleSend}
+          onClick={() => handleSend()}
           disabled={loading}
           style={{ padding: "0.75rem 1.5rem", backgroundColor: "#2E9E83", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}
         >
@@ -200,10 +227,17 @@ function App() {
         </button>
 
         <button
-          onClick={startVoiceInput}
+          onClick={isListening ? stopVoiceConversation : startVoiceConversation}
           style={{ padding: "0.75rem 1.5rem", backgroundColor: "#555", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}
         >
-          🎙️ Speak
+          {isListening ? "⏹️ Stop Chat" : "🎙️ Start Chat"}
+        </button>
+
+        <button
+          onClick={summarizeMood}
+          style={{ padding: "0.75rem 1.5rem", backgroundColor: "#888", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}
+        >
+          📊 Mood Report
         </button>
       </div>
 
