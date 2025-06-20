@@ -124,36 +124,52 @@ function App() {
   };
 
   const handleSend = async (customInput) => {
-    const msg = customInput || message;
-    if (!msg.trim()) return;
-    setLoading(true);
-    setResponse("");
-    try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "gpt-4",
-          messages: [
-            { role: "system", content: "You are a calming emotional assistant." },
-            { role: "user", content: msg }
-          ]
-        })
-      });
-      const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || "I'm here with you.";
-      setResponse(reply);
-      speak(reply);
-    } catch (err) {
-      console.error("OpenAI error:", err);
-      setResponse("Sorry, I couldn’t reach the AI.");
-    } finally {
-      setLoading(false);
+  const msg = customInput || message;
+  if (!msg.trim()) return;
+  setLoading(true);
+  setResponse("");
+
+  // ✅ Check if API key is loaded
+  console.log("Loaded API key:", apiKey);
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a calm, emotionally intelligent assistant who gives thoughtful, supportive, and helpful replies. Use empathetic language and avoid short answers."
+          },
+          { role: "user", content: msg }
+        ]
+      })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("❌ OpenAI API error response:", errText);
+      throw new Error(`API error: ${res.status}`);
     }
-  };
+
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content || "I'm here with you.";
+    setResponse(reply);
+    speak(reply);
+  } catch (err) {
+    console.error("OpenAI fetch error:", err);
+    setResponse("Sorry, I couldn’t reach the AI.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleFreeMeditation = () => {
     localStorage.setItem("freeUsed", "yes");
