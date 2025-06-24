@@ -2,10 +2,17 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LandingPage from "./LandingPage.jsx"; // 🏠 Luxury Homepage
+import MainApp from "./mainapp.jsx";         // 🤖 AI-Powered Assistant
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/app" element={<MainApp />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
