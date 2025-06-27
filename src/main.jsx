@@ -3,7 +3,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./landingpage.jsx"; // 🏠 Luxury Homepage
+import LandingPage from "./LandingPage.jsx"; // ✅ Fixed case for Netlify
 import MainApp from "./mainapp.jsx";         // 🤖 AI-Powered Assistant
 
 ReactDOM.createRoot(document.getElementById("root")).render(
