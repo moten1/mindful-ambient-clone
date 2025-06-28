@@ -6,11 +6,18 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 
 export default function MeditationApp() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [accessType, setAccessType] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(() => {
+    return localStorage.getItem("loggedIn") === "true";
+  });
+
+  const [accessType, setAccessType] = useState(() => {
+    return localStorage.getItem("accessType") || null;
+  });
+
   const [code, setCode] = useState("");
   const [showVideo, setShowVideo] = useState(false);
   const [freeAccessAllowed, setFreeAccessAllowed] = useState(true);
+  const [invalidCode, setInvalidCode] = useState(false);
 
   // Helper to get date string like 'YYYY-MM-DD'
   const getTodayString = () => new Date().toISOString().split("T")[0];
@@ -22,6 +29,17 @@ export default function MeditationApp() {
       setFreeAccessAllowed(false);
     }
   }, []);
+
+  // Save loggedIn and accessType to localStorage
+  useEffect(() => {
+    localStorage.setItem("loggedIn", loggedIn.toString());
+  }, [loggedIn]);
+
+  useEffect(() => {
+    if (accessType) {
+      localStorage.setItem("accessType", accessType);
+    }
+  }, [accessType]);
 
   // Handle free session start
   const handleStartFree = () => {
@@ -39,14 +57,23 @@ export default function MeditationApp() {
       timeout = setTimeout(() => {
         setShowVideo(false);
         setAccessType(null);
+        localStorage.removeItem("accessType");
       }, 660000); // 11 minutes
     }
     return () => clearTimeout(timeout);
   }, [accessType, showVideo]);
 
-  const handleLogin = () => setLoggedIn(true);
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
   const handleCodeSubmit = () => {
-    if (code === "PREMIUM123") setAccessType("premium");
+    if (code === "PREMIUM123") {
+      setAccessType("premium");
+      setInvalidCode(false);
+    } else {
+      setInvalidCode(true);
+    }
   };
 
   return (
@@ -106,6 +133,9 @@ export default function MeditationApp() {
               <Button className="bg-[#d4af37] text-white" onClick={handleCodeSubmit}>
                 Access Premium
               </Button>
+              {invalidCode && (
+                <p className="text-sm text-red-600 mt-2">Invalid code. Please try again.</p>
+              )}
             </CardContent>
           </Card>
         </motion.div>
