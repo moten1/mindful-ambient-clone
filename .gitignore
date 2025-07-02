@@ -1,8 +1,12 @@
-.vercel
-.env 
+# Ignore environment files
+.env
 
-# Local Netlify folder
-.netlify
-dist/ 
-dist/ 
+# Vercel/Netlify local folders (safe to ignore)
+.vercel/
+.netlify/
+
+# Node dependencies
 node_modules/
+
+# Allow dist/ for GitHub Pages deployment (remove or comment this)
+# dist/
