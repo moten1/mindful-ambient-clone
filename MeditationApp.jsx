@@ -19,10 +19,8 @@ export default function MeditationApp() {
   const [freeAccessAllowed, setFreeAccessAllowed] = useState(true);
   const [invalidCode, setInvalidCode] = useState(false);
 
-  // Helper to get date string like 'YYYY-MM-DD'
   const getTodayString = () => new Date().toISOString().split("T")[0];
 
-  // Check on mount if free session was accessed today
   useEffect(() => {
     const lastFreeAccess = localStorage.getItem("lastFreeAccessDate");
     if (lastFreeAccess === getTodayString()) {
@@ -30,7 +28,6 @@ export default function MeditationApp() {
     }
   }, []);
 
-  // Save loggedIn and accessType to localStorage
   useEffect(() => {
     localStorage.setItem("loggedIn", loggedIn.toString());
   }, [loggedIn]);
@@ -41,16 +38,18 @@ export default function MeditationApp() {
     }
   }, [accessType]);
 
-  // Handle free session start
   const handleStartFree = () => {
     if (!freeAccessAllowed) return;
+
+    const audio = new Audio(`${import.meta.env.BASE_URL}audiopresession.mp3`);
+    audio.play();
+
     setAccessType("free");
     setShowVideo(true);
     localStorage.setItem("lastFreeAccessDate", getTodayString());
     setFreeAccessAllowed(false);
   };
 
-  // Reset to choices after 11 minutes of free session
   useEffect(() => {
     let timeout;
     if (accessType === "free" && showVideo) {
@@ -82,7 +81,7 @@ export default function MeditationApp() {
         <div className="fixed inset-0 z-50 bg-black">
           <video
             className="w-full h-full object-cover"
-            src="/free-session.mp4"
+            src={`${import.meta.env.BASE_URL}free-session.mp4`}
             autoPlay
             controls={false}
             muted
