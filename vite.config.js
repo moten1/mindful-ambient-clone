@@ -13,18 +13,18 @@ export default defineConfig({
         name: 'Mindful Ambient',
         short_name: 'Mindful',
         description: 'A mindful ambient experience to help you relax, focus, and recharge.',
-        start_url: '/mindful-ambient-clone/',
+        start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1e1e1e',
         icons: [
           {
-            src: '/mindful-ambient-clone/icons/icon-192.png',
+            src: '/icons/icon-192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/mindful-ambient-clone/icons/icon-512.png',
+            src: '/icons/icon-512.png',
             sizes: '512x512',
             type: 'image/png'
           }
@@ -47,16 +47,21 @@ export default defineConfig({
       }
     })
   ],
-  base: '/mindful-ambient-clone/',
+
+  // ✅ Deploying to root of Netlify (not GitHub Pages)
+  base: './',
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
+
   build: {
     outDir: 'dist',
     emptyOutDir: true,
   },
+
   server: {
     port: 3000,
     open: true,
