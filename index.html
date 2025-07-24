@@ -3,10 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Mindful App</title>
-    <script type="module" crossorigin src="/mindful-ambient-clone/assets/index-qEqMXMK5.js"></script>
-  </head>
+
+    <!-- App Theme & Display -->
+    <meta name="theme-color" content="#1e1e1e" />
+    <meta name="description" content="A mindful ambient experience to help you relax, focus, and recharge." />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/mindful-ambient-clone/manifest.json" />
+
+    <!-- Favicon / App Icon -->
+    <link rel="icon" href="/mindful-ambient-clone/icons/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/mindful-ambient-clone/icons/icon-512.png" />
+
+    <!-- Preload Audio File -->
+    <link rel="preload" href="/audiopresion.mp3" as="audio" type="audio/mpeg" />
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Mindful App" />
+    <meta property="og:description" content="A mindful ambient experience to help you relax, focus, and recharge." />
+    <meta property="og:image" content="/mindful-ambient-clone/icons/icon-512.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://moten.netlify.app" />
+  <link rel="manifest" href="/mindful-ambient-clone/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/mindful-ambient-clone/registerSW.js"></script></head>
+
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
+    <!-- Vite will inject the correct script during build -->
   </body>
 </html>
