@@ -4,6 +4,7 @@ import path from 'path';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  base: '/mindful-ambient-clone/', // Hardcoded for GitHub Pages
   plugins: [
     react(),
     VitePWA({
@@ -13,22 +14,22 @@ export default defineConfig({
         name: 'Mindful Ambient',
         short_name: 'Mindful',
         description: 'A mindful ambient experience to help you relax, focus, and recharge.',
-        start_url: '/',
+        start_url: '/mindful-ambient-clone/', // Adjusted for GitHub Pages
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1e1e1e',
         icons: [
           {
-            src: '/icons/icon-192.png',
+            src: 'icons/icon-192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
-            src: '/icons/icon-512.png',
+            src: 'icons/icon-512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
+            type: 'image/png',
+          },
+        ],
       },
       workbox: {
         runtimeCaching: [
@@ -39,31 +40,25 @@ export default defineConfig({
               cacheName: 'audio-cache',
               expiration: {
                 maxEntries: 5,
-                maxAgeSeconds: 7 * 24 * 60 * 60 // 1 week
-              }
-            }
-          }
-        ]
-      }
-    })
+                maxAgeSeconds: 7 * 24 * 60 * 60,
+              },
+            },
+          },
+        ],
+      },
+    }),
   ],
-
-  // ✅ Deploying to root of Netlify (not GitHub Pages)
-  base: './',
-
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
-
   build: {
     outDir: 'dist',
     emptyOutDir: true,
   },
-
   server: {
     port: 3000,
     open: true,
-  }
+  },
 });
