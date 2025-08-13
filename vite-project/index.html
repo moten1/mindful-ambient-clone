@@ -2,34 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <!-- Viewport for mobile responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-
-    <!-- Title & SEO -->
     <title>Mindful Ambient</title>
     <meta name="description" content="Mindful Ambient - A calm, immersive soundscape experience.">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#1e1e1e">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- Preload soundtrack to improve user experience -->
-    <link rel="preload" href="/assets/soundtrack.mp3" as="fetch" type="audio/mpeg" crossorigin="anonymous" />
+    <!-- Favicon -->
+    <link rel="icon" href="/mindful-ambient-clone/favicon.ico" type="image/x-icon" />
 
-    <!-- Optional: Preconnect to any external resources like fonts or APIs -->
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/mindful-ambient-clone/manifest.webmanifest" />
+
+    <!-- Preload soundtrack -->
+    <link rel="preload" href="/mindful-ambient-clone/assets/soundtrack.mp3" as="fetch" type="audio/mpeg" crossorigin="anonymous" />
+
+    <!-- Optional: Fonts or preconnect -->
     <!-- <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin> -->
-
-    <!-- Optional: Custom fonts -->
     <!-- <link href="https://fonts.googleapis.com/css2?family=YourFont&display=swap" rel="stylesheet"> -->
   </head>
 
   <body class="bg-black text-white">
-    <!-- Root app element for Vite -->
     <div id="app"></div>
 
-    <!-- Load your main TypeScript/JavaScript module -->
-    <script type="module" src="/src/main.ts" defer></script>
+    <!-- Main App -->
+    <script type="module" src="/mindful-ambient-clone/src/main.ts" defer></script>
+
+    <!-- Register Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/mindful-ambient-clone/sw.js').then(registration => {
+            console.log('SW registered: ', registration);
+          }).catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+        });
+      }
+    </script>
   </body>
 </html>

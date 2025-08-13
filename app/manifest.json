@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Energy Healing Voice Coach",
+  "description": "A 10-minute voice-guided energy healing experience with conversational AI.",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "microphone"
+  ],
+  "host_permissions": [
+    "https://your-backend-server.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "audio/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "options_page": "options.html"
+}

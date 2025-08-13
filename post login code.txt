@@ -1,0 +1,133 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#121714] dark group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#2b362f] px-10 py-3">
+          <div class="flex items-center gap-4 text-white">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Wellness AI</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <button
+              class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#2b362f] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+            >
+              <div class="text-white" data-icon="Gear" data-size="20px" data-weight="regular">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                  <path
+                    d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"
+                  ></path>
+                </svg>
+              </div>
+            </button>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8d03cDcIHiUAScXjoQZGcRcJNoGWno0fH9g-WpWGsM6XhtoYelgpzQ0z_0z4ECD8Y-PKrZjvHd6kO-k7rgkOmICQPq3sOVEfnWhmtqMFGcU-wMfTCtsY4YP8vlTvh7Zf-ZxEisNDopgRV9DynNhE66Jn9hgniL0Wz6-8gQV8sYT7LdmFGxCITzrDQsQhHBlXkfaAoCEd-v1aMgfAUqwzkCzzc-GxmS4U7vrxj0cV_ZXcDtmewfcIkEzJlTFwDw9FxxXwlZMUXWMk");'
+            ></div>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <h2 class="text-white tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Welcome back, Amelia</h2>
+            <p class="text-white text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+              Your personal AI wellness assistant is ready to help you feel your best. Choose a session type to get started.
+            </p>
+            <div class="flex justify-center">
+              <div class="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#2b362f] text-white text-sm font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Free Session</span>
+                </button>
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#94e0b2] text-[#121714] text-sm font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Start Session</span>
+                </button>
+              </div>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Session Preview</h2>
+            <div class="p-4 @container">
+              <div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row @xl:items-start">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYZ1keckSPQFMA8_EKTHeUMYZYZ1_UJDmgLWsuOHODrI65nv28mUif-hX3aoOldon3aX5_6Ps69SLQD6_y4SpcRGYvGPuIPSJ58K6-7rrXUO8mN9GLTIw3ZHq2FenvXa0G670MQaDZh60PAwUM7qvjvsdjZ8s14g98da8339soYNeSnnIrP9tfRRj8-Zoi4c8_-8bhff3YlPDWslYjCX0eQvE0OL1ZVz9Px_xNNDZD8zh_Xf9yYXEhoqgG-xG0KSuZSJzesPU7Vt4");'
+                ></div>
+                <div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 py-4 @xl:px-4">
+                  <p class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Mood Indicator: Locked</p>
+                  <div class="flex items-end gap-3 justify-between">
+                    <p class="text-[#a2b4a9] text-base font-normal leading-normal">
+                      Premium features are locked. Activate with a valid code to unlock mood detection and other premium features.
+                    </p>
+                    <button
+                      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#94e0b2] text-[#121714] text-sm font-medium leading-normal"
+                    >
+                      <span class="truncate">Activate Premium</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Chat</h2>
+            <div class="flex items-end gap-3 p-4">
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFWls_OEqZIwgne7vd--3xE2mn5j6H7InfA6CUSr8Qii-xvCmXLNVUOKggcUrY5CAhzZ8gdVEBciJmcfCItjJB8jT-PG1oLND4XjcQWgV3tfhLnzHzwPvXl7w2K_AWXGUfpzuGf_Lho01qCk1BwLGVFAHodSNLA1po_TkCTBBicVroxPl1RgQHtoQWiyq2y4cIMUatJo8n54dVtsdVD4hqmLpkeHpZcB9ALc6da-9xDKAm39eeuWnePNzaQxRyVYO4viP9Thfog-0");'
+              ></div>
+              <div class="flex flex-1 flex-col gap-1 items-start">
+                <p class="text-[#a2b4a9] text-[13px] font-normal leading-normal max-w-[360px]">AI Assistant</p>
+                <p class="text-base font-normal leading-normal flex max-w-[360px] rounded-xl px-4 py-3 bg-[#2b362f] text-white">
+                  Hello Amelia, I'm ready to assist you. How are you feeling today?
+                </p>
+              </div>
+            </div>
+            <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+              <label class="flex flex-col min-w-40 flex-1">
+                <textarea
+                  placeholder="Type your message..."
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#2b362f] focus:border-none min-h-36 placeholder:text-[#a2b4a9] p-4 text-base font-normal leading-normal"
+                ></textarea>
+              </label>
+            </div>
+            <div class="flex justify-stretch">
+              <div class="flex flex-1 gap-3 flex-wrap px-4 py-3 justify-between">
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#2b362f] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+                >
+                  <span class="truncate">Speak</span>
+                </button>
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#94e0b2] text-[#121714] text-sm font-bold leading-normal tracking-[0.015em]"
+                >
+                  <span class="truncate">Send</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
