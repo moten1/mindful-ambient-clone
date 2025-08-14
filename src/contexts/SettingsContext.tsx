@@ -1,7 +1,35 @@
+import React, { createContext, useContext } from "react";
+import { defaultVoice, ElevenLabsVoice } from "@/utils/elevenlabs";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { defaultVoice, ElevenLabsVoice } from '@/utils/elevenlabs';
+// ---- Persistent State Hook ----
+function usePersistentState<T>(key: string, defaultValue: T) {
+  const [value, setValue] = React.useState<T>(defaultValue);
 
+  // Load from localStorage after mount
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        setValue(JSON.parse(stored));
+      }
+    } catch {
+      console.warn(`Error reading ${key} from localStorage`);
+    }
+  }, [key]);
+
+  // Save to localStorage when value changes
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      console.warn(`Error writing ${key} to localStorage`);
+    }
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
+
+// ---- Types ----
 interface SettingsContextType {
   elevenLabsApiKey: string;
   setElevenLabsApiKey: (key: string) => void;
@@ -11,56 +39,48 @@ interface SettingsContextType {
   setNarrationEnabled: (enabled: boolean) => void;
 }
 
-const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+const SettingsContext = createContext<SettingsContextType | undefined>(
+  undefined
+);
 
-export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Load settings from localStorage on component mount
-  const [elevenLabsApiKey, setElevenLabsApiKey] = useState<string>(() => {
-    const saved = localStorage.getItem('elevenlabs-api-key');
-    return saved || '';
-  });
-  
-  const [selectedVoice, setSelectedVoice] = useState<ElevenLabsVoice>(() => {
-    const saved = localStorage.getItem('elevenlabs-voice');
-    return saved ? JSON.parse(saved) : defaultVoice;
-  });
-  
-  const [narrationEnabled, setNarrationEnabled] = useState<boolean>(() => {
-    const saved = localStorage.getItem('narration-enabled');
-    return saved ? JSON.parse(saved) : true;
-  });
-  
-  // Save settings to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('elevenlabs-api-key', elevenLabsApiKey);
-  }, [elevenLabsApiKey]);
-  
-  useEffect(() => {
-    localStorage.setItem('elevenlabs-voice', JSON.stringify(selectedVoice));
-  }, [selectedVoice]);
-  
-  useEffect(() => {
-    localStorage.setItem('narration-enabled', JSON.stringify(narrationEnabled));
-  }, [narrationEnabled]);
-  
+// ---- Provider ----
+export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [elevenLabsApiKey, setElevenLabsApiKey] = usePersistentState<string>(
+    "elevenlabs-api-key",
+    ""
+  );
+  const [selectedVoice, setSelectedVoice] = usePersistentState<ElevenLabsVoice>(
+    "elevenlabs-voice",
+    defaultVoice
+  );
+  const [narrationEnabled, setNarrationEnabled] = usePersistentState<boolean>(
+    "narration-enabled",
+    true
+  );
+
   return (
-    <SettingsContext.Provider value={{
-      elevenLabsApiKey,
-      setElevenLabsApiKey,
-      selectedVoice,
-      setSelectedVoice,
-      narrationEnabled,
-      setNarrationEnabled,
-    }}>
+    <SettingsContext.Provider
+      value={{
+        elevenLabsApiKey,
+        setElevenLabsApiKey,
+        selectedVoice,
+        setSelectedVoice,
+        narrationEnabled,
+        setNarrationEnabled,
+      }}
+    >
       {children}
     </SettingsContext.Provider>
   );
 };
 
+// ---- Hook ----
 export const useSettings = (): SettingsContextType => {
   const context = useContext(SettingsContext);
   if (context === undefined) {
-    throw new Error('useSettings must be used within a SettingsProvider');
+    throw new Error("useSettings must be used within a SettingsProvider");
   }
   return context;
 };

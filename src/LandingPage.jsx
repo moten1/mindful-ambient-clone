@@ -8,10 +8,12 @@ const LandingPage = () => {
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = 0.15; // low volume
-      audio.play().catch((e) => {
-        console.warn("Audio playback blocked until user interaction.");
-      });
+      audio.volume = 0.15; // low start
+      audio
+        .play()
+        .catch(() => {
+          console.warn("Autoplay blocked — waiting for user interaction.");
+        });
     }
 
     return () => {
@@ -24,10 +26,9 @@ const LandingPage = () => {
 
   const handleEnter = () => {
     if (audioRef.current) {
-      // Fade out audio when session starts
       const fadeOut = setInterval(() => {
         if (audioRef.current.volume > 0.01) {
-          audioRef.current.volume -= 0.01;
+          audioRef.current.volume = Math.max(0, audioRef.current.volume - 0.01);
         } else {
           audioRef.current.pause();
           clearInterval(fadeOut);
@@ -43,13 +44,14 @@ const LandingPage = () => {
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
     >
       {/* Background Audio */}
-      <audio ref={audioRef} src="/audiopresession.mp3" loop />
+      <audio ref={audioRef} src="/audiopresession.mp3" loop preload="auto" />
 
       {/* Logo */}
       <img
         src="/Logo.png"
         alt="Mindful Logo"
-        style={{ height: "80px", marginBottom: "2rem" }}
+        className="mb-8"
+        style={{ height: "80px" }}
       />
 
       {/* Hero Image */}
@@ -61,16 +63,16 @@ const LandingPage = () => {
         }}
       />
 
-      {/* Text Content */}
+      {/* Text */}
       <h1 className="text-3xl font-bold mt-10 mb-4 text-center">
         Energy Recalibration
       </h1>
       <p className="text-center max-w-xl text-gray-300">
-        Your AI-powered wellness assistant. Detects your mood using voice and webcam,
-        offering personalized support for emotional balance and restoration.
+        Your AI-powered wellness assistant detects your mood using voice and webcam,
+        offering personalized guidance for emotional balance and restoration.
       </p>
 
-      {/* Action Button */}
+      {/* Button */}
       <button
         onClick={handleEnter}
         className="mt-8 py-3 px-6 rounded-full bg-[#38e07b] text-[#111714] font-semibold hover:opacity-90 transition"
